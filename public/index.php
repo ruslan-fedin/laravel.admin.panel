@@ -7,6 +7,8 @@
  * @author   Taylor Otwell <taylor@laravel.com>
  */
 
+use App\SBlog\Core\BlogApp;
+
 define('LARAVEL_START', microtime(true));
 
 /*
@@ -58,3 +60,8 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
+
+require_once __DIR__.'/../config/init.php';
+require_once __DIR__.'/../config/params.php';
+new BlogApp();
+
