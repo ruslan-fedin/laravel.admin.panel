@@ -33,6 +33,12 @@ Route::group(['middleware' => ['status','auth']], function(){
         Route::resource('index', 'MainController')
             -> names('blog.admin.index');
 
+
+
+
     });
 
 });
+
+Route::get('/user/index', 'Blog\User\MainController@index');
+
