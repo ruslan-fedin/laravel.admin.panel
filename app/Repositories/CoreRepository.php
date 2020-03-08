@@ -1,51 +1,78 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Sasha San
+ * Date: 21.05.2019
+ * Time: 11:43
+ */
+
+namespace App\Repositories;
+
+use Illuminate\Database\Eloquent\Model;
+use function PHPSTORM_META\elementType;
 
 
-    namespace App\Repositories;
+abstract class CoreRepository
+{
 
 
-    abstract class CoreRepository
-    {
-
-        protected $model;
-
+    /**
+     * с какой моделью он работает
+     * Illuminate\Database\Eloquent\Model;
+     * @var Model
+     */
+    protected $model;
 
 
     public function __construct()
-        {
-            $this->model = app($this->getModelClass());
-        }
-
-        abstract protected function getModelClass();
-
-
-
-        protected function startConditions(){
-            return clone $this->model;
-        }
-
-
-
-        public function getID($id)
-        {
-            return $this->startConditions()->find($id);
-        }
-
-
-
-        public function getRequstID($get = true, $id = 'id'){
-            if ($get) {
-                $data = $_GET;
-            }
-            else {
-                $data = $_POST;
-            }
-            $id = !empty($data[$id]) ? (int) $data[$id] : null;
-            if ($id) {
-                throw new \Exception('Проверить id', 404);
-            }
-            return $id;
-
-        }
-
+    {
+        $this->model = app($this->getModelClass());
     }
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getModelClass();
+
+
+    /**
+     * @return Model|\Illuminate\Foundation\Application|mixed
+     */
+    protected function startConditions()
+    {
+        return clone $this->model;
+    }
+
+
+
+    public function getAllWithPaginate($perPage = null, $columns = [])
+    {
+        $result = $this
+            ->startConditions()
+            ->select($columns)
+            ->paginate($perPage);
+        return $result;
+    }
+
+
+    public function getEditId($id)
+    {
+        return $this->startConditions()->find($id);
+    }
+
+
+    public function getRequestID($get = true, $id = 'id')
+    {
+        if ($get){
+            $data = $_GET;
+        } else {
+            $data = $_POST;
+        }
+        $id = !empty($data[$id]) ? (int)$data[$id] : null;
+        //Если $id не получили то выбросим сразу ошибку
+        if (!$id){
+            throw new \Exception('Проверить Откуда id, если getRequestID(false) == $_POST', 404);
+        }
+        return $id;
+    }
+}

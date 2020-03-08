@@ -1,53 +1,50 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: Sasha San
+ * Date: 23.05.2019
+ * Time: 22:16
+ */
 
 namespace App\Repositories\Admin;
 
-use App\Repositories\CoreRepository;
-use Db;
-use Illuminate\Database\Eloquent\Model;
 
+use App\Repositories\CoreRepository;
+use DB;
+use Illuminate\Database\Eloquent\Model;
 
 class MainRepository extends CoreRepository
 {
 
+    /**
+     * @return mixed
+     */
     protected function getModelClass()
     {
         return Model::class;
-
     }
 
-
-    /** Get count all orders */
-    public static function getCountsOrders(){
-        $count = \DB::table('orders')
-            ->where('status', '0')
-            ->get()
-            ->count();
+    public static function getCountOrders()
+    {
+        $count =  DB::table('orders')->where('status', '0')->get()->count();
         return $count;
     }
 
-    /** Get count all users */
-    public static function getCountsUsers(){
-        $users = \DB::table('users')
-            ->get()
-            ->count();
-        return $users;
+    public static function getCountUsers()
+    {
+        return DB::table('users')->get()->count();
     }
 
-    /** Get count all product */
-    public static function getCountsProducts(){
-        $prod = \DB::table('products')
-            ->get()
-            ->count();
-        return $prod;
+    public static function getCountProducts()
+    {
+        return DB::table('products')->get()->count();
     }
 
-    /** Get count all categories */
-    public static function getCountsCategories(){
-        $cat = \DB::table('categories')
-            ->get()
-            ->count();
-        return $cat;
+    public static function getCountCategories()
+    {
+        return DB::table('categories')->get()->count();
     }
+
+
+
 }

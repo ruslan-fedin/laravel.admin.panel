@@ -70,6 +70,11 @@
                 </div>
             </div>
 
+            <div class="col-md-6">
+                @include('blog.admin.main.include.orders')
+                @include('blog.admin.main.include.recently')
+            </div>
+
 </div>
     </section>
 @endsection
