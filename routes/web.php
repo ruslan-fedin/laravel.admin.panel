@@ -45,7 +45,17 @@ Route::group(['middleware' => ['status','auth']], function(){
         Route::get('/orders/forcedestroy/{id}','OrderController@forcedestroy')
             ->name('blog.admin.orders.forcedestroy');
 
+
+        Route::get('/categories/mydel','CategoryController@mydel')
+            ->name('blog.admin.categories.mydel');
+
+        $methods = ['index','edit','update','create','store', 'destroy','mydel'];
+        Route::resource('categories', 'CategoryController')
+            ->names('blog.admin.categories');
+
     });
+
+
 
 });
 
