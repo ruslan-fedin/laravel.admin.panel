@@ -4,13 +4,17 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {{--<base href="/adminlte/">--}}
     <link rel="shortcut icon" href="" type="image/png" />
-    <title>{{MetaTag::tag('title')}}</title>
-	<!-- Tell the browser to be responsive to screen width -->
+    <title>{!! MetaTag::tag('title') !!}</title>
+    <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="{{asset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+    <!-- Для select связанные товары в админке добавить товар -->
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/select2/dist/css/select2.css')}}">
     <!-- Font Awesome -->
+
     <link rel="stylesheet" href="{{asset('adminlte/bower_components/font-awesome/css/font-awesome.min.css')}}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{asset('adminlte/bower_components/Ionicons/css/ionicons.min.css')}}">
@@ -22,14 +26,26 @@
 
     <link rel="stylesheet" href="{{asset('css/my.css')}}">
 
+
+
+
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
-<style>
-    .wrapper{
-        overflow:hidden;
-    }
-</style>
+    <style>
+        .wrapper{
+            overflow:hidden;
+        }
+    </style>
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -70,7 +86,7 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="" class="btn btn-default btn-flat">Профиль</a>
+                                    <a href="{{route('blog.admin.users.edit',Auth::user()->id)}}" class="btn btn-default btn-flat">Профиль</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -133,11 +149,11 @@
               </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Список товаров</a></li>
-                        <li><a href="">Добавить товар</a></li>
+                        <li><a href="{{route('blog.admin.products.index')}}">Список товаров</a></li>
+                        <li><a href="{{route('blog.admin.products.create')}}">Добавить товар</a></li>
                     </ul>
                 </li>
-                <li><a href=""><i class="fa fa-database"></i> <span>Кэширование</span></a></li>
+                <li><a href="#"><i class="fa fa-database"></i> <span>Кэширование</span></a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-users"></i> <span>Пользователи</span>
                         <span class="pull-right-container">
@@ -156,8 +172,8 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Список валют</a></li>
-                        <li><a href="">Добавить валюту</a></li>
+                        <li><a href="{{url('/admin/currency/index')}}">Список валют</a></li>
+                        <li><a href="{{url('/admin/currency/add')}}">Добавить валюту</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -167,15 +183,15 @@
 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="">Группы фильтров</a></li>
-                        <li><a href="">Фильтры</a></li>
+                        <li><a href="{{url('admin/filter/group-filter')}}">Группы фильтров</a></li>
+                        <li><a href="{{url('admin/filter/attributes-filter')}}">Фильтры</a></li>
                     </ul>
                 </li>
             </ul>
-
+            <br><br>
             <!-- search form -->
 
-            <form action="" method="get" autocomplete="off"  style="position: absolute;">
+            <form action="{{url('/admin/search/result')}}" method="get" autocomplete="off"  style="position: absolute;">
                 <div class="input-group">
                     <input id="search" name="search" type="text" class="form-control" placeholder="Живой поиск...." style="color: whitesmoke; background-color:#20262a; border: none;">
                     <span class="input-group-btn">
@@ -195,16 +211,18 @@
     <div class="content-wrapper">
 
         <main id="app">
-            @include('blog.admin.components.resul_message')
+            @include('blog.admin.components.result_messages')
             @yield('content')
+
         </main>
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b>Version</b> 3.0
+            <b>Version</b> 2.4.0
         </div>
-        <strong>Copyright &copy; {{ date('Y') }} All rights reserved.</strong>
+        <strong>Copyright &copy; 2019 <a href="http://www.sashasan.com" target="_blank">Sasha San</a>.</strong> All rights
+        reserved.
     </footer>
 
     <div class="control-sidebar-bg"></div>
@@ -214,6 +232,18 @@
 
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+
+<script type="text/javascript">
+    var route = "{{ url('/admin/autocomplete') }}";
+    $('#search').typeahead({
+        source:  function (term, process) {
+            return $.get(route, { term: term }, function (data) {
+                return process(data);
+            });
+        }
+    });
+</script>
 
 <script>
     var pathd = '{{PATH}}';
@@ -221,6 +251,7 @@
 <!-- jQuery 3 -->
 <script src="{{asset('adminlte/bower_components/jquery/dist/jquery.min.js')}}"></script>
 
+<script src="{{asset('js/ajaxupload.js')}}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- Validator -->
@@ -230,8 +261,21 @@
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/dist/js/adminlte.min.js')}}"></script>
 
+<!--для поля ввода с редактором текста в добавить новый тоар-->
+<script src="{{asset('adminlte/bower_components/ckeditor/ckeditor.js')}}"></script>
+<script src="{{asset('adminlte/bower_components/ckeditor/adapters/jquery.js')}}"></script>
+<!-- Для select связанные товары в админке добавить товар -->
+<script src="{{asset('adminlte/bower_components/select2/dist/js/select2.full.js')}}"></script>
+
 <!-- === = ===  -->
+
 <script src="{{asset('js/my.js')}}"></script>
+
+@include('blog.admin.product.include.script_img')
+@include('blog.admin.product.include.script_gallery')
+@include('blog.admin.product.include.script_related_prod')
+
 
 </body>
 </html>
+
