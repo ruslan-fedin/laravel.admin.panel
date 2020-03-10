@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.8.37 on 2020-03-08 14:02:20.
+ * Generated for Laravel 5.8.37 on 2020-03-09 19:00:59.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -14838,6 +14838,106 @@ namespace Lavary\Menu {
  
 }
 
+namespace Arrilot\Widgets { 
+
+    /**
+     * 
+     *
+     */ 
+    class Facade {
+        
+        /**
+         * Run widget without magic method.
+         *
+         * @return mixed 
+         * @static 
+         */ 
+        public static function run()
+        {
+                        /** @var \Arrilot\Widgets\Factories\WidgetFactory $instance */
+                        return $instance->run();
+        }
+        
+        /**
+         * Encrypt widget params to be transported via HTTP.
+         *
+         * @param string $params
+         * @return string 
+         * @static 
+         */ 
+        public static function encryptWidgetParams($params)
+        {
+            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
+                        /** @var \Arrilot\Widgets\Factories\WidgetFactory $instance */
+                        return $instance->encryptWidgetParams($params);
+        }
+        
+        /**
+         * Decrypt widget params that were transported via HTTP.
+         *
+         * @param string $params
+         * @return string 
+         * @static 
+         */ 
+        public static function decryptWidgetParams($params)
+        {
+            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
+                        /** @var \Arrilot\Widgets\Factories\WidgetFactory $instance */
+                        return $instance->decryptWidgetParams($params);
+        }
+         
+    }
+
+    /**
+     * 
+     *
+     */ 
+    class AsyncFacade {
+        
+        /**
+         * Run widget without magic method.
+         *
+         * @return mixed 
+         * @static 
+         */ 
+        public static function run()
+        {
+                        /** @var \Arrilot\Widgets\Factories\AsyncWidgetFactory $instance */
+                        return $instance->run();
+        }
+        
+        /**
+         * Encrypt widget params to be transported via HTTP.
+         *
+         * @param string $params
+         * @return string 
+         * @static 
+         */ 
+        public static function encryptWidgetParams($params)
+        {
+            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
+                        /** @var \Arrilot\Widgets\Factories\AsyncWidgetFactory $instance */
+                        return $instance->encryptWidgetParams($params);
+        }
+        
+        /**
+         * Decrypt widget params that were transported via HTTP.
+         *
+         * @param string $params
+         * @return string 
+         * @static 
+         */ 
+        public static function decryptWidgetParams($params)
+        {
+            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
+                        /** @var \Arrilot\Widgets\Factories\AsyncWidgetFactory $instance */
+                        return $instance->decryptWidgetParams($params);
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -17635,6 +17735,10 @@ namespace  {
     class MetaTag extends \Fomvasss\LaravelMetaTags\Facade {}
 
     class Menu extends \Lavary\Menu\Facade {}
+
+    class Widget extends \Arrilot\Widgets\Facade {}
+
+    class AsyncWidget extends \Arrilot\Widgets\AsyncFacade {}
  
 }
 
